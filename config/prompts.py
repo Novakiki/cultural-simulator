@@ -35,12 +35,12 @@ Generate the next year of their life, considering:
 + - Positive community connections
 
 Response must be in this JSON format:
-{
+{{
     "story": "A culturally authentic description of what happened this year",
-    "stats_changes": {
+    "stats_changes": {{
         "stat_name": "+1 or -1 format"
-    },
-    "updated_stats": {
+    }},
+    "updated_stats": {{
         "age": "integer",
         "faith": "integer",
         "familyTies": "integer",
@@ -51,5 +51,5 @@ Response must be in this JSON format:
         "tradition": "integer",
         "exploration": "integer",
         "alive": "boolean"
-    }
-}"""
+    }}
+}}"""
