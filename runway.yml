@@ -1,0 +1,12 @@
+services:
+  - name: roots-and-routes
+    type: container
+    dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    env:
+      - name: OPENAI_API_KEY
+        sync: false
+    healthcheck:
+      path: /
+      port: 8000 
