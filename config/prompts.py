@@ -4,29 +4,42 @@ import json
 from config.simulation_config import SIMULATION_RULES
 
 def get_simulation_prompt(context, rules):
+    age = context.current_stats.age
+    culture = context.initial_choice
+    stage = "early_years" if age < 8 else "middle_years" if age < 13 else "teen_years"
+    
+    milestones = rules["cultural_milestones"][culture][stage]
+    life_events = rules["life_events"]
+    cultural_values = rules["stat_influences"]["cultural_values"][culture]
+    
     return f"""Given the following context about a person's cultural upbringing:
-Cultural Background: {context.initial_choice}
-Current Age: {context.current_stats.age}
+Cultural Background: {culture}
+Current Age: {age}
 Years in Journey: {context.total_years}
 
-+ Current Stats Analysis:
-+ Faith ({context.current_stats.faith}/100): Influences tradition and community bonds
-+ Family Ties ({context.current_stats.familyTies}/100): Core cultural foundation
-+ Education ({context.current_stats.education}/100): Affects knowledge and independence
-+ 
-+ Important Stat Relationships:
-+ - High faith affects tradition and community positively
-+ - Strong family ties can limit independence but boost cultural knowledge
-+ - Education increases independence and cultural understanding
-+ 
-+ Age-Appropriate Development:
-+ - Changes should be gradual ({'-2 to +2' if context.current_stats.age < 13 else '-3 to +3'})
-+ - Focus on {SIMULATION_RULES['age_appropriate_changes']['child' if context.current_stats.age < 13 else 'teen']['focus_stats']}
+Core Cultural Values (Priority Order):
+{json.dumps(cultural_values, indent=2)}
+These values should influence decisions, reactions, and growth.
+
+Available Cultural Milestones for this age:
+{json.dumps(milestones, indent=2)}
+
+Cultural Context:
+- Each culture has unique approaches to challenges
+- Consider how {culture} typically handles:
+  * Family conflicts
+  * Educational choices
+  * Community interactions
+  * Personal growth
+
+Potential Life Events:
+Family Events: {json.dumps(life_events['cultural_specific'].get(culture, {}), indent=2)}
+Educational Events: {json.dumps(life_events['education']['cultural_context'], indent=2)}
 
 Previous Events: {json.dumps([h.dict() for h in context.choice_history], indent=2)}
 
 Important Guidelines:
-- This story describes events at age {context.current_stats.age}
+- This story describes events at age {age}
 - Reference previous events for continuity
 - Maintain consistent personality traits
 + - Balance challenges with positive growth

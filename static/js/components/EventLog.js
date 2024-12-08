@@ -2,6 +2,21 @@ export class EventLog {
     constructor(cardId) {
         this.container = document.querySelector(`#${cardId} .stories-list`);
         this.loadingState = false;
+        this.animationQueue = [];
+        this.isProcessing = false;
+        this.observer = new IntersectionObserver(
+            (entries) => this.handleVisibility(entries),
+            { threshold: 0.1 }
+        );
+    }
+
+    handleVisibility(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                this.observer.unobserve(entry.target);
+            }
+        });
     }
 
     setLoading(isLoading) {
@@ -37,65 +52,68 @@ export class EventLog {
     }
 
     addEvent(age, story, backgroundColor = null) {
+        console.log('Adding event:', { age, story, backgroundColor });
         if (this.loadingState) {
             this.setLoading(false);
         }
+
+        const container = this.container.closest('.story-container');
+        if (container) {
+            container.classList.remove('hidden');
+        }
+
         const storyElement = this.createEventElement(age, story, backgroundColor);
+        console.log('Created element:', storyElement);
+
         this.container.insertBefore(storyElement, this.container.firstChild);
-        this.animateEvent(storyElement);
+
+        requestAnimationFrame(() => {
+            storyElement.style.opacity = '1';
+            storyElement.style.transform = 'translateY(0)';
+        });
     }
 
-    createEventElement(age, story, backgroundColor) {
+    async processAnimationQueue() {
+        if (this.isProcessing || this.animationQueue.length === 0) return;
+        
+        this.isProcessing = true;
+        const batch = this.animationQueue.splice(0, 3);
+        
+        await Promise.all(batch.map(event => {
+            return new Promise(resolve => {
+                requestAnimationFrame(() => {
+                    const element = this.createEventElement(
+                        event.age, event.story, event.backgroundColor
+                    );
+                    this.container.insertBefore(element, this.container.firstChild);
+                    this.observer.observe(element);
+                    resolve();
+                });
+            });
+        }));
+        
+        this.isProcessing = false;
+        if (this.animationQueue.length > 0) {
+            this.processAnimationQueue();
+        }
+    }
+
+    createEventElement(age, story, backgroundColor = null) {
         const storyElement = document.createElement('div');
-        storyElement.className = 'mb-3 opacity-0 p-3 rounded-lg transition-all duration-300';
+        storyElement.className = 'mb-3 p-3 rounded-lg transition-all duration-300';
+        storyElement.style.opacity = '0';
+        storyElement.style.transform = 'translateY(-10px)';
         
         if (backgroundColor) {
             storyElement.style.backgroundColor = backgroundColor;
         }
 
-        // Truncate story to 100 characters
-        const truncatedStory = story.length > 100 ? story.slice(0, 100) + '...' : story;
-        const isLongStory = story.length > 100;
-
+        console.log('Creating story element with:', { age, story });
         storyElement.innerHTML = `
             <div class="text-sm font-bold mb-1">Age ${age}</div>
-            <div class="text-xs story-content">${truncatedStory}</div>
-            ${isLongStory ? `
-                <button class="text-xs text-blue-400 hover:text-blue-300 mt-1 expand-story">
-                    Read more
-                </button>
-            ` : ''}
+            <div class="text-xs">${story}</div>
         `;
 
-        // Add click handler for expansion if story is long
-        if (isLongStory) {
-            const expandButton = storyElement.querySelector('.expand-story');
-            const storyContent = storyElement.querySelector('.story-content');
-            let isExpanded = false;
-
-            expandButton.addEventListener('click', () => {
-                if (isExpanded) {
-                    storyContent.textContent = truncatedStory;
-                    expandButton.textContent = 'Read more';
-                } else {
-                    storyContent.textContent = story;
-                    expandButton.textContent = 'Show less';
-                }
-                isExpanded = !isExpanded;
-
-                // Animate the height change
-                anime({
-                    targets: storyElement,
-                    height: ['auto'],
-                    duration: 400,
-                    easing: 'easeOutCubic'
-                });
-            });
-        }
-
-        // Add hover interactions
-        this.addHoverEffects(storyElement, backgroundColor);
-        
         return storyElement;
     }
 

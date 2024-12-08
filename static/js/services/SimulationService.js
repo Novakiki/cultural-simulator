@@ -8,6 +8,8 @@ export class SimulationService {
             growth: 'hsl(200, 30%, 25%)',       // Blue for personal growth
             positive: 'hsl(120, 30%, 25%)'      // Green for positive events
         };
+        this.pendingRequests = new Map();
+        this.debounceTime = 300;  // ms
     }
 
     async simulateYear(stats, history, choice) {
@@ -33,10 +35,11 @@ export class SimulationService {
             }
 
             const data = await response.json();
+            console.log('Received data:', data);
             return data;
         } catch (error) {
             console.error('Simulation API error:', error);
-            throw error;
+            throw new Error(`Simulation failed: ${error.message}`);
         }
     }
 

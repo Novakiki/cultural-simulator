@@ -50,15 +50,35 @@ async function handleStartSimulation() {
     const path1Choice = document.getElementById('path1-choice').value;
     const path2Choice = document.getElementById('path2-choice').value;
 
-    if (!path1Choice || !path2Choice) {
-        alert('Please select both cultural backgrounds before starting');
-        return;
-    }
+    // Initial stats
+    const initialStats = {
+        age: 5,
+        faith: 50,
+        familyTies: 80,
+        communityBonds: 60,
+        education: 20,
+        culturalKnowledge: 30,
+        independence: 20,
+        tradition: 50,
+        exploration: 40,
+        alive: true
+    };
 
-    await simulationController.startSimulation(
-        path1Choice, path2Choice,
-        path1Stats, path2Stats,
-        path1History, path2History
+    // Log the request payload
+    console.log('Simulation request:', {
+        current_stats: initialStats,
+        choice_history: [],
+        total_years: 0,
+        initial_choice: path1Choice
+    });
+
+    simulationController.startSimulation(
+        path1Choice,
+        path2Choice,
+        {...initialStats},
+        {...initialStats},
+        [],
+        []
     );
 }
 
