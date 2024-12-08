@@ -231,53 +231,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Share Journey -->
-                <div class="flex justify-center mt-8">
-                    <button class="btn btn-primary btn-sm gap-2" onclick="shareJourney()">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                        </svg>
-                        Share Journey
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Disclaimer Modal -->
-    <dialog id="disclaimer-modal" class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box bg-base-200">
-            <h3 class="font-bold text-lg mb-4 gradient-text">🤖 Cultural Life Simulator Disclaimer</h3>
-            <p class="py-2 text-sm">This simulator uses the GPT-4o-mini language model to explore how different cultural backgrounds might shape a person's life journey. It's designed as an educational experiment to explore cultural perspectives.</p>
-            <p class="py-2 text-sm">Please note:</p>
-            <ul class="list-disc list-inside text-sm ml-2 space-y-1 mb-4">
-                <li>This is purely for entertainment purposes</li>
-                <li>Cultural experiences are unique and far more nuanced in reality</li>
-                <li>This is a simplified representation of complex cultural dynamics</li>
-                <li>Every individual's cultural journey is unique and personal</li>
-            </ul>
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn btn-primary btn-sm">Got it!</button>
-                </form>
-            </div>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-
-    <script type="module" src="/static/js/simulation.js"></script>
+    <!-- Import JavaScript -->
     <script type="module" src="/static/js/main.js"></script>
-    <script>
-        // Show disclaimer modal on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('disclaimer-modal');
-            if (modal) {
-                modal.showModal();
-            }
-        });
-    </script>
 </body>
 </html> 

@@ -1,7 +1,6 @@
 import { StatsDisplay } from './components/StatsDisplay.js';
 import { EventLog } from './components/EventLog.js';
 import { SimulationController } from './controllers/SimulationController.js';
-import { JourneyAnalysis } from './components/JourneyAnalysis.js';
 
 // Initial stats for a 5-year-old child
 const INITIAL_STATS = {
@@ -40,7 +39,6 @@ const simulationController = new SimulationController(
     path1Display, path2Display,
     path1Events, path2Events
 );
-const journeyAnalysis = new JourneyAnalysis();
 
 // State management
 let path1History = [];
@@ -120,11 +118,6 @@ async function handleStartSimulation() {
     }
 }
 
-// Handle journey sharing
-function handleShareJourney() {
-    journeyAnalysis.shareJourney();
-}
-
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing application...');
@@ -175,11 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error('Stop button not found');
-    }
-
-    // Add sharing listeners
-    const shareButton = document.querySelector('[onclick="shareJourney()"]');
-    if (shareButton) {
-        shareButton.onclick = handleShareJourney;
     }
 });
