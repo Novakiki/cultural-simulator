@@ -1,12 +1,27 @@
 """Prompt templates for the Cultural Life Simulator"""
 
 import json
+from config.simulation_config import SIMULATION_RULES
 
 def get_simulation_prompt(context, rules):
     return f"""Given the following context about a person's cultural upbringing:
 Cultural Background: {context.initial_choice}
 Current Age: {context.current_stats.age}
 Years in Journey: {context.total_years}
+
++ Current Stats Analysis:
++ Faith ({context.current_stats.faith}/100): Influences tradition and community bonds
++ Family Ties ({context.current_stats.familyTies}/100): Core cultural foundation
++ Education ({context.current_stats.education}/100): Affects knowledge and independence
++ 
++ Important Stat Relationships:
++ - High faith affects tradition and community positively
++ - Strong family ties can limit independence but boost cultural knowledge
++ - Education increases independence and cultural understanding
++ 
++ Age-Appropriate Development:
++ - Changes should be gradual ({'-2 to +2' if context.current_stats.age < 13 else '-3 to +3'})
++ - Focus on {SIMULATION_RULES['age_appropriate_changes']['child' if context.current_stats.age < 13 else 'teen']['focus_stats']}
 
 Previous Events: {json.dumps([h.dict() for h in context.choice_history], indent=2)}
 
