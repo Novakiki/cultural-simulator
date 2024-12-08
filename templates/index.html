@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternate Life Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        .bg-custom-gradient {
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(192, 132, 252, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(129, 140, 248, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #1e1b4b 0%, #020617 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-custom-gradient">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Title Section -->
+        <div class="flex flex-col items-center mb-8" id="title">
+            <div id="subtitle">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold subtitle-text subtitle-gradient tracking-wide">
+                    Alternate Life Simulator
+                </h1>
+            </div>
+        </div>
+
+        <!-- Stats Cards Section -->
+        <div class="grid grid-cols-2 gap-3 max-w-4xl mx-auto mt-4">
+            <!-- Path 1 Stats Card -->
+            <div class="stat-card rounded-lg p-4 opacity-0 text-sm bg-gradient-to-br from-slate-700/40 to-slate-800/40 backdrop-blur-xl shadow-2xl border border-white/20" id="stats-card-1">
+                <div class="text-lg font-bold mb-2 gradient-text">Path 1</div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Age</div>
+                        <div class="stat-value text-base text-primary stat-age">21 👤</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Wealth</div>
+                        <div class="stat-value text-base text-accent stat-wealth">10k 💰</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Health</div>
+                        <div class="stat-value text-base text-success stat-health">8/10 ❤️</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Education</div>
+                        <div class="stat-value text-base text-info stat-education">5/10 🎓</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Skills</div>
+                        <div class="stat-value text-base text-warning stat-skills">3/10 🛠️</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Network</div>
+                        <div class="stat-value text-base text-error stat-network">6/10 🤝</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Happiness</div>
+                        <div class="stat-value text-base text-secondary stat-happiness">7/10 😊</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Energy</div>
+                        <div class="stat-value text-base text-primary stat-energy">9/10 ⚡</div>
+                    </div>
+                    <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
+                        <div class="stat-title text-xs">Status</div>
+                        <div class="stat-value text-base text-info stat-status">2/10 📚</div>
+                    </div>
+                </div>
+                <!-- Story Container -->
+                <div class="story-container mt-4 max-h-60 overflow-y-auto p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
+                    <div class="text-xs text-base-content/70 mb-2">Life Events (Latest First)</div>
+                    <div class="stories-list">
+                        <!-- Stories will be added here -->
+                    </div>
+                </div>
+                <!-- Simulation Status -->
+                <div class="simulation-status mt-4 text-center hidden">
+                    <div class="loading loading-spinner loading-md"></div>
+                    <p class="text-sm mt-2">Simulating life path...</p>
+                </div>
+            </div>
+
+            <!-- Path 2 Stats Card -->
+            <div class="stat-card rounded-lg p-3 opacity-0 text-sm" id="stats-card-2">
+                <div class="text-lg font-bold mb-2 subtitle-gradient">Path 2</div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Age</div>
+                        <div class="stat-value text-base text-primary stat-age">21 👤</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Wealth</div>
+                        <div class="stat-value text-base text-accent stat-wealth">10k 💰</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Health</div>
+                        <div class="stat-value text-base text-success stat-health">8/10 ❤️</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Education</div>
+                        <div class="stat-value text-base text-info stat-education">5/10 🎓</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Skills</div>
+                        <div class="stat-value text-base text-warning stat-skills">3/10 🛠️</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Network</div>
+                        <div class="stat-value text-base text-error stat-network">6/10 🤝</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Happiness</div>
+                        <div class="stat-value text-base text-secondary stat-happiness">7/10 😊</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Energy</div>
+                        <div class="stat-value text-base text-primary stat-energy">9/10 ⚡</div>
+                    </div>
+                    <div class="stat bg-slate-900/50 rounded p-2 backdrop-blur-sm hover:bg-slate-800/60 transition-all border border-slate-700/30">
+                        <div class="stat-title text-xs">Status</div>
+                        <div class="stat-value text-base text-info stat-status">2/10 📚</div>
+                    </div>
+                </div>
+                <!-- Story Container -->
+                <div class="story-container mt-4 max-h-60 overflow-y-auto p-2 bg-slate-900/30 backdrop-blur-sm rounded-lg hidden border border-slate-700/30">
+                    <div class="text-xs text-base-content/70 mb-2">Life Events (Latest First)</div>
+                    <div class="stories-list">
+                        <!-- Stories will be added here -->
+                    </div>
+                </div>
+                <!-- Simulation Status -->
+                <div class="simulation-status mt-4 text-center hidden">
+                    <div class="loading loading-spinner loading-md"></div>
+                    <p class="text-sm mt-2">Simulating life path...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Life Choices Section -->
+        <div class="flex flex-col gap-4 max-w-4xl mx-auto mt-8">
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Path 1 Choices -->
+                <div>
+                    <select id="path1-choice" class="select select-bordered w-full">
+                        <option disabled selected>Choose Path 1</option>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <!-- Path 2 Choices -->
+                <div>
+                    <select id="path2-choice" class="select select-bordered w-full">
+                        <option disabled selected>Choose Path 2</option>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <!-- Start/Stop Simulation Buttons -->
+            <div class="flex justify-center gap-4 mt-8">
+                <button id="start-simulation" class="btn btn-primary btn-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold py-2 px-6 rounded-lg transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <span class="loading loading-spinner loading-sm mr-2 hidden"></span>
+                    Begin Life Journey
+                </button>
+                <button id="stop-simulation" class="btn btn-outline btn-primary btn-md hidden hover:scale-105 transition-all duration-200">
+                    Stop Simulation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <dialog id="disclaimer-modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box bg-base-200">
+            <h3 class="font-bold text-lg mb-4 gradient-text">🤖 AI Life Simulator Disclaimer</h3>
+            <p class="py-2 text-sm">This simulator uses the GPT-4o-mini language model to generate life events and outcomes. It's designed as a fun experiment to explore different life paths.</p>
+            <p class="py-2 text-sm">Please note:</p>
+            <ul class="list-disc list-inside text-sm ml-2 space-y-1 mb-4">
+                <li>This is purely for entertainment purposes</li>
+                <li>Any similarities to real life events are coincidental</li>
+                <li>The AI model may generate unexpected or unrealistic outcomes</li>
+                <li>Life choices and their consequences are far more complex in reality</li>
+            </ul>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn btn-primary btn-sm">Got it!</button>
+                </form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <script src="/static/js/simulation.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+        // Show disclaimer modal on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('disclaimer-modal');
+            if (modal) {
+                modal.showModal();
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,41 @@
+beautiful animated fastapi with daisy ui tailwind and anime js
+use favison.ico
+use echo.png round in a nice way next to title in static folder. this will be small and next to the title(left)
+
+make sure website is beautiful and responsive in all devices. use smaller fonts etc for smaller screens
+make sure title fits nicely with small fonts on smaller screens
+
+step 1:
+add title www.echohive.live with sub title alterante life simulator linking to same url. make this beautiful and animated ina  really stylish way
+also have a subtle downlaod this project button in footer on the page for now linking to same as above
+links open in new tab
+step 2:
+add 2 beautiful finely small crafted cards side by side for life stats for a imaginary 21 year old person with sci fi generic but very unique name
+these cards will be the same and will display stats like age, wealth(staarst 10.000), education, health etc that may change oevr time. have 9 metrics in each card
+they are the same because we will simulate both paths and these stats will change accorinng to what happens in each path
+make these cards fit everything in them snuggly(use small fonts. icons and emojis)
+even in mobile they will display side by side
+
+step3: 
+add two dropdowns with 50 life choices each. these will be for the two paths. make them beautiful
+
+step 3:
+our goal is to simulate the 2 paths using gpt-4o-mini using json mode(respone_format = "json_object")
+but before we do that lets prepare eeverything for it. 
+default stats will always apply to the context we will use for the model so maybe we should move them to the front end? what do you think? which is better, simpler and more robust
+we will have to update these stats with the json output of the model
+dont implement the api calls yet. lets just prepare everything for it.
+
+step 4:
+lets now implement the api calls and the json output for the model.
+we will process the lifetim until alive status changes to "transition to great beyond" although the model cna return boolean
+once selections are made ther should appear a button to start the simulation
+then we make the parallel calls for each year and with its output update the stats, 
+model should get context of prior years and should be objective and not always positive.
+models will return a story for that year(consice) and updated stats which we will use to update the stats on the front end
+once the simulation starts two cards will apper with beautiful waiting aniamtions under each path card
+at this. at this point the dropdowns will stop working
+when we receive each years output we will add it to the cards and update them story will be truncated with the option to expand
+give model a proper structure to output
+implement all this as simple as possible witht he most robust methods possible
+use from openai import AsyncOpenAI
