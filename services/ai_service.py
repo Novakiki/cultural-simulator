@@ -12,31 +12,104 @@ class AIService:
         self.temperature = 0.7
         # Define maximum yearly changes for different stat types
         self.max_yearly_changes = {
-            'faith': 5,           # Faith changes tend to be gradual
-            'familyTies': 5,      # Family relationships change slowly
-            'communityBonds': 5,  # Community bonds change gradually
-            'education': 8,       # Education can progress more quickly
-            'culturalKnowledge': 6,
-            'independence': 5,    # Independence grows gradually
-            'tradition': 4,       # Traditional values change slowly
-            'exploration': 6      # Exploration can vary more
+            'faith': 2,           # Reduced from 3
+            'familyTies': 2,      # Reduced from 3
+            'communityBonds': 3,  # Reduced from 4
+            'education': 4,       # Unchanged
+            'culturalKnowledge': 3,  # Reduced from 4
+            'independence': 2,    # Reduced from 3
+            'tradition': 2,       # Reduced from 3
+            'exploration': 3      # Unchanged
+        }
+
+        # Define path-specific modifiers
+        self.path_modifiers = {
+            'Mormon Family 🏠': {
+                'faith': 1.5,
+                'tradition': 1.3,
+                'exploration': 0.8,
+                'familyTies': 1.2,
+                'communityBonds': 1.2
+            },
+            'Secular Household 🌎': {
+                'faith': 0.7,
+                'tradition': 0.8,
+                'exploration': 1.3,
+                'independence': 1.2,
+                'culturalKnowledge': 1.2
+            },
+            'Buddhist Temple 🏮': {
+                'faith': 1.3,
+                'tradition': 1.2,
+                'exploration': 1.1,
+                'independence': 1.2
+            },
+            'Islamic Community 🕌': {
+                'faith': 1.4,
+                'tradition': 1.3,
+                'communityBonds': 1.2,
+                'familyTies': 1.2
+            },
+            'Jewish Heritage 🕍': {
+                'faith': 1.3,
+                'tradition': 1.2,
+                'culturalKnowledge': 1.2,
+                'familyTies': 1.2
+            },
+            'Hindu Traditions 🕉️': {
+                'faith': 1.3,
+                'tradition': 1.2,
+                'familyTies': 1.2,
+                'culturalKnowledge': 1.2
+            },
+            'Christian Home ✝️': {
+                'faith': 1.3,
+                'tradition': 1.1,
+                'communityBonds': 1.2
+            },
+            'Atheist Family 🧬': {
+                'faith': 0.6,
+                'tradition': 0.8,
+                'exploration': 1.3,
+                'independence': 1.3,
+                'education': 1.2
+            },
+            'Indigenous Culture 🪶': {
+                'tradition': 1.4,
+                'culturalKnowledge': 1.3,
+                'communityBonds': 1.2,
+                'familyTies': 1.2
+            },
+            'Multicultural Home 🌏': {
+                'culturalKnowledge': 1.4,
+                'exploration': 1.3,
+                'independence': 1.2,
+                'tradition': 0.9
+            }
         }
 
     def _apply_diminishing_returns(self, value: int, change: int) -> int:
-        """Apply diminishing returns for stats over 90."""
-        if value > 90:
+        """Apply diminishing returns for stats over 75."""
+        if value > 75:
             # Reduce the change based on how close to 100 we are
-            reduction_factor = (value - 90) / 10  # Will be between 0 and 1
+            reduction_factor = (value - 75) / 25  # Will be between 0 and 1
             change = change * (1 - reduction_factor)
         return round(change)
 
-    def _apply_growth_limits(self, stat_name: str, original_value: int, new_value: int) -> int:
-        """Apply growth rate limits to stat changes."""
-        max_change = self.max_yearly_changes.get(stat_name, 5)  # Default to 5 if stat not specified
+    def _apply_growth_limits(self, stat_name: str, original_value: int, new_value: int, cultural_background: str) -> int:
+        """Apply growth rate limits and cultural modifiers to stat changes."""
+        max_change = self.max_yearly_changes.get(stat_name, 3)  # Default to 3 if stat not specified
         change = new_value - original_value
+
+        # Apply cultural background modifier
+        if cultural_background in self.path_modifiers:
+            modifier = self.path_modifiers[cultural_background].get(stat_name, 1.0)
+            change = change * modifier
+
         # Apply diminishing returns for high values
         if change > 0:  # Only apply to positive changes
             change = self._apply_diminishing_returns(original_value, change)
+        
         limited_change = max(min(change, max_change), -max_change)
         return max(0, min(100, original_value + limited_change))
 
@@ -56,11 +129,16 @@ class AIService:
             current_age = context.current_stats.age
             result['updated_stats']['age'] = current_age + 1
             
-            # Apply growth limits to each stat
+            # Apply growth limits to each stat with cultural background modifier
             for key, value in result['updated_stats'].items():
                 if key not in ['age', 'alive']:
                     original_value = getattr(context.current_stats, key)
-                    result['updated_stats'][key] = self._apply_growth_limits(key, original_value, value)
+                    result['updated_stats'][key] = self._apply_growth_limits(
+                        key, 
+                        original_value, 
+                        value,
+                        context.initial_choice
+                    )
             
             result['story'] = result['story'].replace(
                 f"{current_age + 1}-year-old",
@@ -108,14 +186,14 @@ Important Guidelines:
 6. Maintain realistic progression of stats based on events
 7. All stats must stay between 0 and 100
 8. Stats should change gradually:
-   - Faith: max ±5 per year
-   - Family Ties: max ±5 per year
-   - Community Bonds: max ±7 per year
-   - Education: max ±8 per year
-   - Cultural Knowledge: max ±6 per year
-   - Independence: max ±5 per year
-   - Tradition: max ±4 per year
-   - Exploration: max ±6 per year
+   - Faith: max ±3 per year
+   - Family Ties: max ±3 per year
+   - Community Bonds: max ±4 per year
+   - Education: max ±4 per year
+   - Cultural Knowledge: max ±4 per year
+   - Independence: max ±3 per year
+   - Tradition: max ±3 per year
+   - Exploration: max ±3 per year
 
 Please generate a response in JSON format following this structure:
 {{

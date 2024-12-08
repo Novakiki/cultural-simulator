@@ -23,18 +23,21 @@
 <body class="min-h-screen bg-custom-gradient">
     <div class="container mx-auto px-4 py-8">
         <!-- Title Section -->
-        <div class="flex flex-col items-center mb-8" id="title">
-            <div id="subtitle">
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold subtitle-text subtitle-gradient tracking-wide">
-                    Cultural Life Simulator
+        <div class="flex flex-col items-center justify-center text-center mb-12" id="title">
+            <div class="w-full max-w-4xl mx-auto px-4">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold subtitle-text subtitle-gradient tracking-wide mb-4">
+                    Roots & Routes
                 </h1>
+                <p class="text-base md:text-lg text-slate-300 mx-auto">
+                    Explore parallel life journeys through different cultural upbringings
+                </p>
             </div>
         </div>
 
         <!-- Stats Cards Section -->
         <div class="grid grid-cols-2 gap-3 max-w-4xl mx-auto mt-4">
             <!-- Path 1 Stats Card -->
-            <div class="stat-card rounded-lg p-4 opacity-0 text-sm bg-gradient-to-br from-slate-700/40 to-slate-800/40 backdrop-blur-xl shadow-2xl border border-white/20" id="stats-card-1">
+            <div id="stats-card-1" class="card bg-base-200 shadow-xl mb-8 w-full">
                 <div class="text-lg font-bold mb-2 gradient-text">Cultural Path 1</div>
                 <div class="grid grid-cols-3 gap-2">
                     <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
@@ -74,22 +77,33 @@
                         <div class="stat-value text-base text-info stat-exploration">40/100 🌟</div>
                     </div>
                 </div>
-                <!-- Story Container -->
-                <div class="story-container mt-4 h-60 p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
-                    <div class="text-xs text-base-content/70 mb-2">Cultural Milestones & Events</div>
-                    <div class="stories-list h-full overflow-y-auto custom-scrollbar" style="scrollbar-gutter: stable;">
-                        <!-- Stories will be added here -->
-                    </div>
-                </div>
                 <!-- Simulation Status -->
                 <div class="simulation-status mt-4 text-center hidden">
                     <div class="loading loading-spinner loading-md"></div>
                     <p class="text-sm mt-2">Exploring cultural journey...</p>
                 </div>
+                <!-- Cultural Influence Card -->
+                <div class="mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
+                    <h3 class="text-sm font-semibold mb-3 text-primary-content">Cultural Influence</h3>
+                    <div class="space-y-3">
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Values:</span>
+                            <span class="cultural-values-1 text-slate-300"></span>
+                        </div>
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Traditions:</span>
+                            <span class="cultural-traditions-1 text-slate-300"></span>
+                        </div>
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Challenges:</span>
+                            <span class="cultural-challenges-1 text-slate-300"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Path 2 Stats Card -->
-            <div class="stat-card rounded-lg p-4 opacity-0 text-sm bg-gradient-to-br from-slate-700/40 to-slate-800/40 backdrop-blur-xl shadow-2xl border border-white/20" id="stats-card-2">
+            <div id="stats-card-2" class="card bg-base-200 shadow-xl mb-8 w-full">
                 <div class="text-lg font-bold mb-2 subtitle-gradient">Cultural Path 2</div>
                 <div class="grid grid-cols-3 gap-2">
                     <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
@@ -129,17 +143,28 @@
                         <div class="stat-value text-base text-info stat-exploration">40/100 🌟</div>
                     </div>
                 </div>
-                <!-- Story Container -->
-                <div class="story-container mt-4 h-60 p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
-                    <div class="text-xs text-base-content/70 mb-2">Cultural Milestones & Events</div>
-                    <div class="stories-list h-full overflow-y-auto custom-scrollbar" style="scrollbar-gutter: stable;">
-                        <!-- Stories will be added here -->
-                    </div>
-                </div>
                 <!-- Simulation Status -->
                 <div class="simulation-status mt-4 text-center hidden">
                     <div class="loading loading-spinner loading-md"></div>
                     <p class="text-sm mt-2">Exploring cultural journey...</p>
+                </div>
+                <!-- Cultural Influence Card -->
+                <div class="mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
+                    <h3 class="text-sm font-semibold mb-3 text-primary-content">Cultural Influence</h3>
+                    <div class="space-y-3">
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Values:</span>
+                            <span class="cultural-values-2 text-slate-300"></span>
+                        </div>
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Traditions:</span>
+                            <span class="cultural-traditions-2 text-slate-300"></span>
+                        </div>
+                        <div class="text-xs">
+                            <span class="font-medium text-accent-content block mb-1">Challenges:</span>
+                            <span class="cultural-challenges-2 text-slate-300"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,27 +175,72 @@
                 <!-- Path 1 Choices -->
                 <div>
                     <select id="path1-choice" class="select select-bordered w-full">
-                        <option disabled selected>Choose Cultural Background 1</option>
-                        <!-- Options populated by JS -->
+                        <option value="Secular Household 🌎" selected>Secular Household 🌎</option>
+                        <option value="Mormon Family 🏠">Mormon Family 🏠</option>
+                        <!-- Other options will be populated by JS -->
                     </select>
                 </div>
                 <!-- Path 2 Choices -->
                 <div>
                     <select id="path2-choice" class="select select-bordered w-full">
-                        <option disabled selected>Choose Cultural Background 2</option>
-                        <!-- Options populated by JS -->
+                        <option value="Mormon Family 🏠" selected>Mormon Family 🏠</option>
+                        <option value="Secular Household 🌎">Secular Household 🌎</option>
+                        <!-- Other options will be populated by JS -->
                     </select>
                 </div>
             </div>
             <!-- Start/Stop Simulation Buttons -->
-            <div class="flex justify-center gap-4 mt-8">
-                <button id="start-simulation" class="btn bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2 px-6 rounded-lg transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="start-simulation" class="btn bg-indigo-600 hover:bg-indigo-700 text-white">
                     <span class="loading loading-spinner loading-sm mr-2 hidden"></span>
                     Begin Cultural Journey
                 </button>
-                <button id="stop-simulation" class="btn btn-outline btn-error btn-md hidden hover:scale-105 transition-all duration-200">
+                <button id="stop-simulation" class="btn btn-outline btn-error hidden">
                     Stop Simulation
                 </button>
+            </div>
+        </div>
+
+        <!-- Life Journey Comparison Section -->
+        <div class="max-w-4xl mx-auto mt-12" id="journey-analysis">
+            <div class="bg-base-200 rounded-lg p-6 shadow-xl">
+                <h3 class="text-lg font-bold mb-4 gradient-text text-center">Parallel Paths</h3>
+                
+                <!-- Timeline Container -->
+                <div id="timeline-comparison" class="space-y-4">
+                    <!-- Timeline entries will be added here -->
+                </div>
+
+                <!-- Timeline Entry Template -->
+                <div id="timeline-template" class="hidden">
+                    <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
+                        <div class="flex items-center mb-2">
+                            <span class="text-sm font-semibold text-primary-content age-label"></span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <h4 class="text-sm font-medium text-accent-content path1-culture"></h4>
+                                <p class="text-xs path1-story line-clamp-3 hover:line-clamp-none transition-all duration-200"></p>
+                                <div class="text-xs text-slate-400 path1-stats"></div>
+                            </div>
+                            <div class="space-y-2">
+                                <h4 class="text-sm font-medium text-accent-content path2-culture"></h4>
+                                <p class="text-xs path2-story line-clamp-3 hover:line-clamp-none transition-all duration-200"></p>
+                                <div class="text-xs text-slate-400 path2-stats"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Journey -->
+                <div class="flex justify-center mt-8">
+                    <button class="btn btn-primary btn-sm gap-2" onclick="shareJourney()">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                        Share Journey
+                    </button>
+                </div>
             </div>
         </div>
     </div>

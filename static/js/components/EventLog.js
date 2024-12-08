@@ -2,63 +2,66 @@ export class EventLog {
     constructor(cardId) {
         this.container = document.querySelector(`#${cardId} .stories-list`);
         this.loadingState = false;
+        this.cardId = cardId;
     }
 
-    setLoading(isLoading) {
-        this.loadingState = isLoading;
-        const container = this.container.closest('.story-container');
+    showLoading() {
+        const container = document.querySelector(`#${this.cardId} .story-container`);
+        const loadingStatus = document.querySelector(`#${this.cardId} .simulation-status`);
+        
+        if (container) container.classList.remove('hidden');
+        if (loadingStatus) loadingStatus.classList.remove('hidden');
+        
+        this.loadingState = true;
+    }
+
+    hideLoading() {
+        const loadingStatus = document.querySelector(`#${this.cardId} .simulation-status`);
+        if (loadingStatus) loadingStatus.classList.add('hidden');
+        this.loadingState = false;
+    }
+
+    clear() {
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
+        const container = document.querySelector(`#${this.cardId} .story-container`);
         if (container) {
-            if (isLoading) {
-                container.classList.remove('hidden');
-                this.addLoadingPlaceholder();
-            } else {
-                this.removeLoadingPlaceholder();
-            }
+            container.classList.add('hidden');
         }
     }
 
-    addLoadingPlaceholder() {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'loading-placeholder mb-3 p-3 rounded-lg bg-slate-800/50';
-        placeholder.innerHTML = `
-            <div class="animate-pulse">
-                <div class="h-4 bg-slate-700 rounded w-1/4 mb-2"></div>
-                <div class="h-3 bg-slate-700 rounded w-3/4"></div>
-            </div>
-        `;
-        this.container.insertBefore(placeholder, this.container.firstChild);
-    }
-
-    removeLoadingPlaceholder() {
-        const placeholder = this.container.querySelector('.loading-placeholder');
-        if (placeholder) {
-            placeholder.remove();
-        }
-    }
-
-    addEvent(age, story, backgroundColor = null) {
-        if (this.loadingState) {
-            this.setLoading(false);
-        }
-        const storyElement = this.createEventElement(age, story, backgroundColor);
+    addEvent(event) {
+        if (!this.container) return;
+        
+        const storyElement = this.createEventElement(event);
         this.container.insertBefore(storyElement, this.container.firstChild);
         this.animateEvent(storyElement);
     }
 
-    createEventElement(age, story, backgroundColor) {
+    createEventElement(event) {
         const storyElement = document.createElement('div');
-        storyElement.className = 'mb-3 opacity-0 p-3 rounded-lg transition-all duration-300';
-        
-        if (backgroundColor) {
-            storyElement.style.backgroundColor = backgroundColor;
-        }
+        storyElement.className = 'mb-3 opacity-0 p-3 rounded-lg transition-all duration-300 bg-slate-800/50';
 
         // Truncate story to 100 characters
-        const truncatedStory = story.length > 100 ? story.slice(0, 100) + '...' : story;
-        const isLongStory = story.length > 100;
+        const truncatedStory = event.story.length > 100 ? event.story.slice(0, 100) + '...' : event.story;
+        const isLongStory = event.story.length > 100;
+
+        // Create stats changes HTML
+        const statsChanges = Object.entries(event.stats_changes)
+            .filter(([_, change]) => parseInt(change) !== 0)
+            .map(([stat, change]) => {
+                const changeNum = parseInt(change);
+                const color = changeNum > 0 ? 'text-green-400' : 'text-red-400';
+                return `<span class="${color}">${stat}: ${change}</span>`;
+            })
+            .join(' ');
 
         storyElement.innerHTML = `
-            <div class="text-sm font-bold mb-1">Age ${age}</div>
+            <div class="flex justify-between items-start mb-1">
+                <div class="text-sm font-bold">Age ${event.year}</div>
+                <div class="text-xs space-x-2">${statsChanges}</div>
+            </div>
             <div class="text-xs story-content">${truncatedStory}</div>
             ${isLongStory ? `
                 <button class="text-xs text-blue-400 hover:text-blue-300 mt-1 expand-story">
@@ -78,7 +81,7 @@ export class EventLog {
                     storyContent.textContent = truncatedStory;
                     expandButton.textContent = 'Read more';
                 } else {
-                    storyContent.textContent = story;
+                    storyContent.textContent = event.story;
                     expandButton.textContent = 'Show less';
                 }
                 isExpanded = !isExpanded;
@@ -93,9 +96,6 @@ export class EventLog {
             });
         }
 
-        // Add hover interactions
-        this.addHoverEffects(storyElement, backgroundColor);
-        
         return storyElement;
     }
 
@@ -106,38 +106,6 @@ export class EventLog {
             opacity: [0, 1],
             duration: 800,
             easing: 'easeOutElastic(1, .8)'
-        });
-    }
-
-    addHoverEffects(element, backgroundColor) {
-        if (!backgroundColor) return;
-
-        element.addEventListener('mouseenter', () => {
-            anime({
-                targets: element,
-                scale: 1.02,
-                duration: 300,
-                easing: 'easeOutCubic',
-                update: function(anim) {
-                    const progress = anim.progress / 100;
-                    const lightenAmount = 5 * progress;
-                    element.style.backgroundColor = backgroundColor.replace('25%', `${25 + lightenAmount}%`);
-                }
-            });
-        });
-
-        element.addEventListener('mouseleave', () => {
-            anime({
-                targets: element,
-                scale: 1,
-                duration: 300,
-                easing: 'easeOutCubic',
-                update: function(anim) {
-                    const progress = 1 - (anim.progress / 100);
-                    const lightenAmount = 5 * progress;
-                    element.style.backgroundColor = backgroundColor.replace('25%', `${25 + lightenAmount}%`);
-                }
-            });
         });
     }
 }

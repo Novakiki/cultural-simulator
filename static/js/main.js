@@ -1,87 +1,185 @@
-// Cultural background choices array
+import { StatsDisplay } from './components/StatsDisplay.js';
+import { EventLog } from './components/EventLog.js';
+import { SimulationController } from './controllers/SimulationController.js';
+import { JourneyAnalysis } from './components/JourneyAnalysis.js';
+
+// Initial stats for a 5-year-old child
+const INITIAL_STATS = {
+    age: 5,
+    faith: 50,
+    familyTies: 80,
+    communityBonds: 60,
+    education: 20,
+    culturalKnowledge: 30,
+    independence: 20,
+    tradition: 50,
+    exploration: 40,
+    alive: true
+};
+
+// Cultural backgrounds
 const CULTURAL_BACKGROUNDS = [
-    "Mormon Family 🏠",
-    "Secular Household 🌎",
-    "Jewish Family ✡️",
-    "Buddhist Family 🕉️",
-    "Hindu Family 🕉️",
-    "Muslim Family 🕌",
-    "Catholic Family ⛪",
-    "Protestant Family 📖",
-    "Orthodox Christian Family ☦️",
-    "Sikh Family 🏠",
-    "Traditional Chinese Family 🏮",
-    "Japanese Family 🗾",
-    "Korean Family 🇰🇷",
-    "Indian Family 🪔",
-    "Native American Family 🪶",
-    "African Traditional Family 🌍",
-    "Greek Orthodox Family ⛪",
-    "Russian Orthodox Family ☦️",
-    "Amish Family 🏠",
-    "Mennonite Family 🏠"
+    'Secular Household 🌎',
+    'Mormon Family 🏠',
+    'Buddhist Temple 🏮',
+    'Islamic Community 🕌',
+    'Jewish Heritage 🕍',
+    'Hindu Traditions 🕉️',
+    'Christian Home ✝️',
+    'Atheist Family 🧬',
+    'Indigenous Culture 🪶',
+    'Multicultural Home 🌏'
 ];
 
-// Initialize dropdowns with cultural backgrounds
-function initializeDropdowns() {
-    try {
-        const path1Select = document.getElementById('path1-choice');
-        const path2Select = document.getElementById('path2-choice');
+// Initialize components
+const path1Display = new StatsDisplay('stats-card-1');
+const path2Display = new StatsDisplay('stats-card-2');
+const path1Events = new EventLog('stats-card-1');
+const path2Events = new EventLog('stats-card-2');
+const simulationController = new SimulationController(
+    path1Display, path2Display,
+    path1Events, path2Events
+);
+const journeyAnalysis = new JourneyAnalysis();
 
-        if (!path1Select || !path2Select) {
-            console.error('Dropdown elements not found');
+// State management
+let path1History = [];
+let path2History = [];
+let path1Stats = { ...INITIAL_STATS };
+let path2Stats = { ...INITIAL_STATS };
+
+// Populate dropdowns
+function populateDropdowns() {
+    const path1Select = document.getElementById('path1-choice');
+    const path2Select = document.getElementById('path2-choice');
+    
+    // Get current selections
+    const path1Current = path1Select.value;
+    const path2Current = path2Select.value;
+    
+    // Clear existing options except the first two (default options)
+    while (path1Select.options.length > 2) path1Select.remove(2);
+    while (path2Select.options.length > 2) path2Select.remove(2);
+    
+    // Add other backgrounds
+    CULTURAL_BACKGROUNDS.forEach(background => {
+        // Skip Mormon and Secular as they're already added
+        if (background === 'Mormon Family 🏠' || background === 'Secular Household 🌎') {
             return;
         }
-
-        // Clear existing options
-        path1Select.innerHTML = '<option disabled selected>Choose Cultural Background 1</option>';
-        path2Select.innerHTML = '<option disabled selected>Choose Cultural Background 2</option>';
-
-        // Add cultural backgrounds to both dropdowns
-        CULTURAL_BACKGROUNDS.forEach(culture => {
-            const option1 = document.createElement('option');
-            const option2 = document.createElement('option');
-            option1.value = culture;
-            option2.value = culture;
-            option1.textContent = culture;
-            option2.textContent = culture;
-            path1Select.appendChild(option1);
-            path2Select.appendChild(option2);
-        });
-
-        // Add change event listeners
-        path1Select.addEventListener('change', () => {
-            const selectedOption = path1Select.options[path1Select.selectedIndex];
-            console.log('Background 1 selected:', selectedOption.value);
-        });
-
-        path2Select.addEventListener('change', () => {
-            const selectedOption = path2Select.options[path2Select.selectedIndex];
-            console.log('Background 2 selected:', selectedOption.value);
-        });
-
-    } catch (error) {
-        console.error('Error initializing dropdowns:', error);
+        
+        const option1 = new Option(background, background);
+        const option2 = new Option(background, background);
+        path1Select.add(option1);
+        path2Select.add(option2);
+    });
+    
+    // Restore selections if they were different from defaults
+    if (path1Current && path1Current !== 'Secular Household 🌎') {
+        path1Select.value = path1Current;
+    }
+    if (path2Current && path2Current !== 'Mormon Family 🏠') {
+        path2Select.value = path2Current;
     }
 }
 
-// Initialize everything when the document is ready
-document.addEventListener('DOMContentLoaded', () => {
-    try {
-        console.log('Initializing cultural simulator...');
-        initializeDropdowns();
-        
-        // Initialize anime.js animations for cards
-        anime({
-            targets: '.stat-card',
-            translateY: [-20, 0],
-            opacity: [0, 1],
-            duration: 1000,
-            easing: 'easeOutElastic(1, .8)',
-            delay: anime.stagger(100)
-        });
+// Handle simulation start
+async function handleStartSimulation() {
+    const path1Choice = document.getElementById('path1-choice').value;
+    const path2Choice = document.getElementById('path2-choice').value;
 
+    if (!path1Choice || !path2Choice) {
+        alert('Please select both cultural backgrounds before starting');
+        return;
+    }
+
+    try {
+        // Reset histories and stats
+        path1History = [];
+        path2History = [];
+        path1Stats = { ...INITIAL_STATS };
+        path2Stats = { ...INITIAL_STATS };
+
+        // Reset displays
+        path1Display.updateStats(INITIAL_STATS);
+        path2Display.updateStats(INITIAL_STATS);
+        path1Events.clear();
+        path2Events.clear();
+
+        console.log('Starting simulation with:', { path1Choice, path2Choice });
+
+        // Start simulation
+        await simulationController.startSimulation(
+            path1Choice, path2Choice,
+            path1Stats, path2Stats,
+            path1History, path2History
+        );
     } catch (error) {
-        console.error('Error during initialization:', error);
+        console.error('Error in handleStartSimulation:', error);
+        alert('Failed to start simulation. Please try again.');
+    }
+}
+
+// Handle journey sharing
+function handleShareJourney() {
+    journeyAnalysis.shareJourney();
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing application...');
+    
+    // Populate dropdowns
+    populateDropdowns();
+    
+    // Initialize stats display
+    path1Display.updateStats(INITIAL_STATS);
+    path2Display.updateStats(INITIAL_STATS);
+
+    // Initialize cultural context with default values
+    simulationController.updateCulturalContext(1, 'Secular Household 🌎');
+    simulationController.updateCulturalContext(2, 'Mormon Family 🏠');
+    
+    // Add dropdown change listeners
+    const path1Select = document.getElementById('path1-choice');
+    const path2Select = document.getElementById('path2-choice');
+    
+    if (path1Select) {
+        path1Select.addEventListener('change', (e) => {
+            simulationController.updateCulturalContext(1, e.target.value);
+        });
+    }
+    
+    if (path2Select) {
+        path2Select.addEventListener('change', (e) => {
+            simulationController.updateCulturalContext(2, e.target.value);
+        });
+    }
+    
+    // Add button listeners
+    const startButton = document.getElementById('start-simulation');
+    const stopButton = document.getElementById('stop-simulation');
+    
+    if (startButton) {
+        console.log('Adding start button listener');
+        startButton.addEventListener('click', handleStartSimulation);
+    } else {
+        console.error('Start button not found');
+    }
+    
+    if (stopButton) {
+        console.log('Adding stop button listener');
+        stopButton.addEventListener('click', () => {
+            console.log('Stopping simulation');
+            simulationController.stopSimulation();
+        });
+    } else {
+        console.error('Stop button not found');
+    }
+
+    // Add sharing listeners
+    const shareButton = document.querySelector('[onclick="shareJourney()"]');
+    if (shareButton) {
+        shareButton.onclick = handleShareJourney;
     }
 });

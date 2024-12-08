@@ -1,30 +1,72 @@
 export class StatsDisplay {
-    constructor(cardId, emojis) {
+    constructor(cardId) {
         this.cardId = cardId;
-        this.emojis = emojis;
+        this.emojis = {
+            age: '👤',
+            faith: '🙏',
+            familyTies: '👨‍👩‍👧‍👦',
+            communityBonds: '🤝',
+            education: '🎓',
+            culturalKnowledge: '🌍',
+            independence: '⭐',
+            tradition: '📚',
+            exploration: '🌟'
+        };
+        console.log(`StatsDisplay initialized for card: ${cardId}`);
     }
 
-    updateStats(stats, changes = null) {
+    updateStats(stats) {
         try {
+            console.log(`Updating stats for ${this.cardId}:`, stats);
             Object.entries(stats).forEach(([stat, value]) => {
                 if (stat === 'alive') return;
-                this.updateStatValue(stat, value, changes?.[stat]);
+                this.updateStatValue(stat, value);
             });
+
+            // Show the card if it's hidden
+            const card = document.getElementById(this.cardId);
+            if (card && card.classList.contains('opacity-0')) {
+                card.classList.remove('opacity-0');
+                anime({
+                    targets: card,
+                    translateY: [-20, 0],
+                    opacity: [0, 1],
+                    duration: 1000,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            }
         } catch (error) {
-            console.error('Error updating stats display:', error);
+            console.error(`Error updating stats display for ${this.cardId}:`, error);
         }
     }
 
-    updateStatValue(stat, value, change = null) {
-        const element = document.querySelector(`#${this.cardId} .stat-${stat}`);
-        if (!element) return;
+    updateStatValue(stat, value) {
+        // Find the stat element within the specific card
+        const card = document.getElementById(this.cardId);
+        if (!card) {
+            console.error(`Card not found: ${this.cardId}`);
+            return;
+        }
 
+        const element = card.querySelector(`.stat-${stat}`);
+        if (!element) {
+            console.error(`Stat element not found: ${stat} in card ${this.cardId}`);
+            return;
+        }
+
+        console.log(`Updating ${stat} to ${value} in ${this.cardId}`);
+        const oldValue = this.extractCurrentValue(element.textContent);
         const newValue = this.formatValue(stat, value);
         element.textContent = newValue;
 
-        if (change) {
-            this.animateChange(element, change);
+        if (oldValue !== null && oldValue !== value) {
+            this.animateChange(element, value - oldValue);
         }
+    }
+
+    extractCurrentValue(text) {
+        const match = text.match(/(\d+)/);
+        return match ? parseInt(match[1]) : null;
     }
 
     formatValue(stat, value) {
@@ -33,13 +75,14 @@ export class StatsDisplay {
     }
 
     animateChange(element, change) {
-        const changeValue = parseInt(change);
-        const color = changeValue > 0 ? '#86efac' : '#fca5a5';
-        
+        if (change === 0) return;
+
+        const color = change > 0 ? '#86efac' : '#fca5a5';
         const indicator = document.createElement('div');
-        const description = this.getChangeDescription(changeValue);
+        const description = this.getChangeDescription(change);
+        
         indicator.innerHTML = `
-            <span>${changeValue > 0 ? `+${changeValue}` : changeValue}</span>
+            <span>${change > 0 ? `+${change}` : change}</span>
             <span class="text-xs opacity-80"> ${description}</span>
         `;
         indicator.style.position = 'absolute';
@@ -53,6 +96,7 @@ export class StatsDisplay {
         element.style.position = 'relative';
         element.appendChild(indicator);
 
+        // Highlight stat change
         anime({
             targets: element,
             scale: [1, 1.2, 1],
@@ -60,6 +104,7 @@ export class StatsDisplay {
             easing: 'easeOutElastic(1, .8)'
         });
 
+        // Animate indicator
         anime({
             targets: indicator,
             translateY: [-20, -30],

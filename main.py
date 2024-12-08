@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -7,6 +7,9 @@ from config.prompts import get_simulation_prompt
 from config.simulation_config import SIMULATION_RULES
 from models.schemas import Stats, ChoiceHistory, SimulationContext, SimulationResponse
 from services.ai_service import AIService
+from typing import Dict, Any
+import asyncio
+import traceback
 
 print(colored("Starting Cultural Life Simulator...", "cyan"))
 
@@ -31,34 +34,79 @@ async def home(request: Request):
         )
     except Exception as e:
         print(colored(f"Error rendering template: {str(e)}", "red"))
-        raise
+        raise HTTPException(status_code=500, detail=str(e))
+
+def validate_simulation_response(response: Dict[str, Any]) -> bool:
+    """Validate the simulation response has all required fields."""
+    required_fields = {'updated_stats', 'story', 'stats_changes'}
+    if not all(field in response for field in required_fields):
+        return False
+    if not isinstance(response['updated_stats'], dict):
+        return False
+    if not isinstance(response['story'], str):
+        return False
+    if not isinstance(response['stats_changes'], dict):
+        return False
+    return True
 
 @app.post("/api/simulate_year")
 async def simulate_year(context: SimulationContext) -> SimulationResponse:
     try:
         print(colored(f"Received request with context: {context.dict()}", "cyan"))
+        
+        # Validate API key
         if not ai_service.client.api_key:
-            raise ValueError("OpenAI API key not found in environment variables")
+            raise HTTPException(
+                status_code=500,
+                detail="OpenAI API key not found in environment variables"
+            )
         
-        # Updated prompt for cultural simulation
-        prompt = get_simulation_prompt(context, SIMULATION_RULES)
+        # Validate input context
+        if not context.current_stats or not context.initial_choice:
+            raise HTTPException(
+                status_code=422,
+                detail="Invalid simulation context: missing required fields"
+            )
         
-        # Make API call
-        print(colored(f"Exploring cultural year {context.total_years}", "yellow"))
-        response = await ai_service.generate_year_simulation(context, SIMULATION_RULES)
-        
-        # Convert to Pydantic model for validation
-        simulation_response = SimulationResponse(**response)
-        
-        return simulation_response
+        # Set timeout for simulation
+        try:
+            # Updated prompt for cultural simulation
+            prompt = get_simulation_prompt(context, SIMULATION_RULES)
+            
+            # Make API call with timeout
+            print(colored(f"Exploring cultural year {context.total_years}", "yellow"))
+            response = await asyncio.wait_for(
+                ai_service.generate_year_simulation(context, SIMULATION_RULES),
+                timeout=15.0  # 15 second timeout
+            )
+            
+            # Validate response structure
+            if not validate_simulation_response(response):
+                raise HTTPException(
+                    status_code=500,
+                    detail="Invalid response format from AI service"
+                )
+            
+            # Convert to Pydantic model for validation
+            simulation_response = SimulationResponse(**response)
+            
+            return simulation_response
 
+        except asyncio.TimeoutError:
+            raise HTTPException(
+                status_code=504,
+                detail="Simulation request timed out"
+            )
+
+    except HTTPException as he:
+        print(colored(f"HTTP error in simulation: {str(he)}", "red"))
+        raise he
     except Exception as e:
         print(colored(f"Detailed error in simulation: {str(e)}", "red"))
-        import traceback
         print(colored(f"Traceback: {traceback.format_exc()}", "red"))
-        return JSONResponse(
+        raise HTTPException(
             status_code=500,
-            content={"error": str(e)}
+            detail=f"Internal server error: {str(e)}"
         )
 
 if __name__ == "__main__":
