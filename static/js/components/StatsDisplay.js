@@ -2,36 +2,17 @@ export class StatsDisplay {
     constructor(cardId, emojis) {
         this.cardId = cardId;
         this.emojis = emojis;
-        this.pendingUpdates = new Map();
-        this.frameRequest = null;
     }
 
     updateStats(stats, changes = null) {
         try {
-            if (this.frameRequest) {
-                cancelAnimationFrame(this.frameRequest);
-            }
-
-            this.frameRequest = requestAnimationFrame(() => {
-                Object.entries(stats).forEach(([stat, value]) => {
-                    if (stat === 'alive') return;
-                    this.pendingUpdates.set(stat, {
-                        value,
-                        change: changes?.[stat]
-                    });
-                });
-                this.processPendingUpdates();
+            Object.entries(stats).forEach(([stat, value]) => {
+                if (stat === 'alive') return;
+                this.updateStatValue(stat, value, changes?.[stat]);
             });
         } catch (error) {
             console.error('Error updating stats display:', error);
         }
-    }
-
-    processPendingUpdates() {
-        this.pendingUpdates.forEach((update, stat) => {
-            this.updateStatValue(stat, update.value, update.change);
-        });
-        this.pendingUpdates.clear();
     }
 
     updateStatValue(stat, value, change = null) {
@@ -39,9 +20,7 @@ export class StatsDisplay {
         if (!element) return;
 
         const newValue = this.formatValue(stat, value);
-        if (element.textContent !== newValue) {
-            element.textContent = newValue;
-        }
+        element.textContent = newValue;
 
         if (change) {
             this.animateChange(element, change);

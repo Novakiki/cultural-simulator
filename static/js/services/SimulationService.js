@@ -3,13 +3,10 @@ export class SimulationService {
         this.baseUrl = '/api';
         // Define consistent colors for different types of events
         this.eventColors = {
-            challenging: 'hsl(350, 30%, 25%)',  // Muted red for challenges
-            mixed: 'hsl(280, 30%, 25%)',        // Purple for mixed experiences
-            growth: 'hsl(200, 30%, 25%)',       // Blue for personal growth
-            positive: 'hsl(120, 30%, 25%)'      // Green for positive events
+            challenging: 'hsl(0, 40%, 25%)',    // Reddish for challenges
+            neutral: 'hsl(220, 40%, 25%)',      // Bluish for neutral events
+            positive: 'hsl(120, 40%, 25%)'      // Greenish for positive events
         };
-        this.pendingRequests = new Map();
-        this.debounceTime = 300;  // ms
     }
 
     async simulateYear(stats, history, choice) {
@@ -35,28 +32,22 @@ export class SimulationService {
             }
 
             const data = await response.json();
-            console.log('Received data:', data);
             return data;
         } catch (error) {
             console.error('Simulation API error:', error);
-            throw new Error(`Simulation failed: ${error.message}`);
+            throw error;
         }
     }
 
     getEventColor(response) {
-        // Analyze the story themes and changes
-        const changes = response.stats_changes;
-        const positiveChanges = Object.values(changes).filter(c => parseInt(c) > 0).length;
-        const negativeChanges = Object.values(changes).filter(c => parseInt(c) < 0).length;
+        // Determine event type based on stat changes
+        const changes = Object.values(response.stats_changes)
+            .map(change => parseInt(change))
+            .reduce((sum, change) => sum + change, 0);
         
-        // Check for growth indicators
-        const hasGrowth = changes.education > 0 || changes.culturalKnowledge > 0 || changes.independence > 0;
-        const hasChallenges = changes.familyTies < 0 || changes.tradition < 0;
-        
-        if (positiveChanges > negativeChanges) return this.eventColors.positive;
-        if (hasGrowth && hasChallenges) return this.eventColors.growth;
-        if (positiveChanges === negativeChanges) return this.eventColors.mixed;
-        return this.eventColors.challenging;
+        if (changes < 0) return this.eventColors.challenging;
+        if (changes > 0) return this.eventColors.positive;
+        return this.eventColors.neutral;
     }
 
     getContrastColor(bgColor) {
