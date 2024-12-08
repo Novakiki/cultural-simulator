@@ -75,9 +75,9 @@
                     </div>
                 </div>
                 <!-- Story Container -->
-                <div class="story-container mt-4 max-h-60 overflow-y-auto p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
+                <div class="story-container mt-4 h-60 p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
                     <div class="text-xs text-base-content/70 mb-2">Cultural Milestones & Events</div>
-                    <div class="stories-list">
+                    <div class="stories-list h-full overflow-y-auto custom-scrollbar" style="scrollbar-gutter: stable;">
                         <!-- Stories will be added here -->
                     </div>
                 </div>
@@ -89,8 +89,8 @@
             </div>
 
             <!-- Path 2 Stats Card -->
-            <div class="stat-card rounded-lg p-3 opacity-0 text-sm" id="stats-card-2">
-                <div class="text-lg font-bold mb-2 subtitle-gradient">Path 2</div>
+            <div class="stat-card rounded-lg p-4 opacity-0 text-sm bg-gradient-to-br from-slate-700/40 to-slate-800/40 backdrop-blur-xl shadow-2xl border border-white/20" id="stats-card-2">
+                <div class="text-lg font-bold mb-2 subtitle-gradient">Cultural Path 2</div>
                 <div class="grid grid-cols-3 gap-2">
                     <div class="stat bg-slate-900/70 rounded p-2 backdrop-blur-md hover:bg-slate-800/80 transition-all border border-slate-600/50">
                         <div class="stat-title text-xs">Age</div>
@@ -130,16 +130,16 @@
                     </div>
                 </div>
                 <!-- Story Container -->
-                <div class="story-container mt-4 max-h-60 overflow-y-auto p-2 bg-slate-900/30 backdrop-blur-sm rounded-lg hidden border border-slate-700/30">
-                    <div class="text-xs text-base-content/70 mb-2">Life Events (Latest First)</div>
-                    <div class="stories-list">
+                <div class="story-container mt-4 h-60 p-3 bg-gradient-to-br from-slate-600/30 to-slate-700/40 backdrop-blur-2xl rounded-lg hidden border border-white/20 shadow-xl">
+                    <div class="text-xs text-base-content/70 mb-2">Cultural Milestones & Events</div>
+                    <div class="stories-list h-full overflow-y-auto custom-scrollbar" style="scrollbar-gutter: stable;">
                         <!-- Stories will be added here -->
                     </div>
                 </div>
                 <!-- Simulation Status -->
                 <div class="simulation-status mt-4 text-center hidden">
                     <div class="loading loading-spinner loading-md"></div>
-                    <p class="text-sm mt-2">Simulating life path...</p>
+                    <p class="text-sm mt-2">Exploring cultural journey...</p>
                 </div>
             </div>
         </div>
@@ -164,11 +164,11 @@
             </div>
             <!-- Start/Stop Simulation Buttons -->
             <div class="flex justify-center gap-4 mt-8">
-                <button id="start-simulation" class="btn btn-primary btn-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold py-2 px-6 rounded-lg transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                <button id="start-simulation" class="btn bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2 px-6 rounded-lg transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
                     <span class="loading loading-spinner loading-sm mr-2 hidden"></span>
                     Begin Cultural Journey
                 </button>
-                <button id="stop-simulation" class="btn btn-outline btn-primary btn-md hidden hover:scale-105 transition-all duration-200">
+                <button id="stop-simulation" class="btn btn-outline btn-error btn-md hidden hover:scale-105 transition-all duration-200">
                     Stop Simulation
                 </button>
             </div>
@@ -198,8 +198,8 @@
         </form>
     </dialog>
 
-    <script src="/static/js/simulation.js"></script>
-    <script src="/static/js/main.js"></script>
+    <script type="module" src="/static/js/simulation.js"></script>
+    <script type="module" src="/static/js/main.js"></script>
     <script>
         // Show disclaimer modal on page load
         document.addEventListener('DOMContentLoaded', () => {

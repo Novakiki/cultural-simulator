@@ -179,3 +179,32 @@
         background: rgba(78, 205, 196, 0.08);
     }
 }
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(78, 205, 196, 0.5) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(78, 205, 196, 0.3);
+    border-radius: 20px;
+    border: 2px solid transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(78, 205, 196, 0.5);
+}
+
+/* Prevent scroll interference */
+.stories-list {
+    isolation: isolate;
+}
