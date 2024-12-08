@@ -1,15 +1,28 @@
-// Initial stats for a 21-year-old person
+// Initial stats for a 5-year-old child
 const INITIAL_STATS = {
-    age: 21,
-    wealth: 10000,
-    health: 100,
-    education: 70,
-    skills: 50,
-    network: 30,
-    happiness: 75,
-    energy: 90,
-    status: 50,
+    age: 5,
+    faith: 50,
+    familyTies: 80,
+    communityBonds: 60,
+    education: 20,
+    culturalKnowledge: 30,
+    independence: 20,
+    tradition: 50,
+    exploration: 40,
     alive: true
+};
+
+// Format stat values with appropriate emoji
+const STAT_EMOJIS = {
+    age: '👤',
+    faith: '🙏',
+    familyTies: '👨‍👩‍👧‍👦',
+    communityBonds: '🤝',
+    education: '🎓',
+    culturalKnowledge: '🌍',
+    independence: '⭐',
+    tradition: '📚',
+    exploration: '🌟'
 };
 
 // State management
@@ -37,27 +50,12 @@ function getContrastColor(bgColor) {
 function updateStatsDisplay(stats, cardId, changes = null) {
     try {
         const formatValue = (stat, value) => {
+            const emoji = STAT_EMOJIS[stat] || '';
             switch(stat) {
                 case 'age':
-                    return `${value} 👤`;
-                case 'wealth':
-                    return `${value >= 1000 ? (value/1000).toFixed(0) + 'k' : value} 💰`;
-                case 'health':
-                    return `${value} ❤️`;
-                case 'education':
-                    return `${value} 🎓`;
-                case 'skills':
-                    return `${value} 🛠️`;
-                case 'network':
-                    return `${value} 🤝`;
-                case 'happiness':
-                    return `${value} 😊`;
-                case 'energy':
-                    return `${value} ⚡`;
-                case 'status':
-                    return `${value} 📚`;
+                    return `${value} ${emoji}`;
                 default:
-                    return value;
+                    return `${value}/100 ${emoji}`;
             }
         };
 
@@ -114,19 +112,16 @@ function updateStatsDisplay(stats, cardId, changes = null) {
 
 // Display transition message
 function displayTransitionMessage(message, pathId) {
-    const card = document.querySelector(`#${pathId}`);
-    if (!card) return;
-
-    // Create transition message element
     const transitionElement = document.createElement('div');
-    transitionElement.className = 'transition-message bg-base-300 p-4 rounded-lg mb-4 opacity-0';
     transitionElement.innerHTML = `
         <div class="text-center">
-            <div class="text-2xl mb-2">✨ Journey Complete ✨</div>
+            <div class="text-2xl mb-2">🌍 Cultural Journey Complete 🌍</div>
             <p class="text-sm">${message}</p>
-            <div class="text-xs mt-2 opacity-70">🕊️ Rest in Peace 🕊️</div>
         </div>
     `;
+
+    const card = document.querySelector(`#${pathId}`);
+    if (!card) return;
 
     // Insert at the top of the card
     card.insertBefore(transitionElement, card.firstChild);

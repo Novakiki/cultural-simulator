@@ -1,7 +1,7 @@
-# Life Simulator - Alternate Paths Explorer
+# Cultural Life Simulator
 
 ## Overview
-Life Simulator is an interactive web application that lets users explore two different life paths simultaneously using AI-generated narratives. The simulator uses GPT-4o-mini to create realistic, branching life stories based on initial life choices.
+Cultural Life Simulator is an interactive web application that explores how different cultural backgrounds shape life experiences.
 
 ## Features
 - Parallel simulation of two different life paths

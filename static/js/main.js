@@ -1,58 +1,28 @@
-// Life choices array
-const LIFE_CHOICES = [
-    "Pursue Higher Education 🎓",
-    "Start a Business Venture 💼",
-    "Travel the World 🌎",
-    "Focus on Career Growth 📈",
-    "Learn New Skills 🛠️",
-    "Start a Family 👨‍👩‍👧‍👦",
-    "Move to a New City 🏙️",
-    "Invest in Real Estate 🏠",
-    "Join a Startup 🚀",
-    "Become a Freelancer 💻",
-    "Study Abroad 🌍",
-    "Join Corporate World 🏢",
-    "Start a YouTube Channel 🎥",
-    "Learn Programming 👨‍💻",
-    "Open a Restaurant 🍽️",
-    "Become a Teacher 👨‍🏫",
-    "Write a Book 📚",
-    "Start a Non-Profit 🤝",
-    "Become an Artist 🎨",
-    "Join the Military 🪖",
-    "Become a Doctor 👨‍⚕️",
-    "Start a Band 🎸",
-    "Become an Athlete 🏃‍♂️",
-    "Study Psychology 🧠",
-    "Learn Photography 📸",
-    "Start a Podcast 🎙️",
-    "Become an Actor 🎭",
-    "Study Law 👨‍⚖️",
-    "Learn to Code 💻",
-    "Start a Blog ✍️",
-    "Become a Chef 👨‍🍳",
-    "Join Politics 🏛️",
-    "Study Architecture 🏗️",
-    "Become a Pilot ✈️",
-    "Start a Farm 🌾",
-    "Learn Dancing 💃",
-    "Become a Designer 🎨",
-    "Study Marine Biology 🐠",
-    "Start a Tech Company 🖥️",
-    "Become a Journalist 📰",
-    "Learn Music 🎼",
-    "Study Environmental Science 🌿",
-    "Become a Financial Advisor 💰",
-    "Start a Fashion Brand 👔",
-    "Join Space Program 🚀",
-    "Study Robotics 🤖",
-    "Become a Social Worker 🤲",
-    "Learn Film Making 🎬",
-    "Start a Sports Career ⚽",
-    "Become a Researcher 🔬"
+// Cultural background choices array
+const CULTURAL_BACKGROUNDS = [
+    "Mormon Family 🏠",
+    "Secular Household 🌎",
+    "Jewish Family ✡️",
+    "Buddhist Family 🕉️",
+    "Hindu Family 🕉️",
+    "Muslim Family 🕌",
+    "Catholic Family ⛪",
+    "Protestant Family 📖",
+    "Orthodox Christian Family ☦️",
+    "Sikh Family 🏠",
+    "Traditional Chinese Family 🏮",
+    "Japanese Family 🗾",
+    "Korean Family 🇰🇷",
+    "Indian Family 🪔",
+    "Native American Family 🪶",
+    "African Traditional Family 🌍",
+    "Greek Orthodox Family ⛪",
+    "Russian Orthodox Family ☦️",
+    "Amish Family 🏠",
+    "Mennonite Family 🏠"
 ];
 
-// Initialize dropdowns with life choices
+// Initialize dropdowns with cultural backgrounds
 function initializeDropdowns() {
     try {
         const path1Select = document.getElementById('path1-choice');
@@ -64,17 +34,17 @@ function initializeDropdowns() {
         }
 
         // Clear existing options
-        path1Select.innerHTML = '<option disabled selected>Choose Path 1</option>';
-        path2Select.innerHTML = '<option disabled selected>Choose Path 2</option>';
+        path1Select.innerHTML = '<option disabled selected>Choose Cultural Background 1</option>';
+        path2Select.innerHTML = '<option disabled selected>Choose Cultural Background 2</option>';
 
-        // Add life choices to both dropdowns
-        LIFE_CHOICES.forEach(choice => {
+        // Add cultural backgrounds to both dropdowns
+        CULTURAL_BACKGROUNDS.forEach(culture => {
             const option1 = document.createElement('option');
             const option2 = document.createElement('option');
-            option1.value = choice;
-            option2.value = choice;
-            option1.textContent = choice;
-            option2.textContent = choice;
+            option1.value = culture;
+            option2.value = culture;
+            option1.textContent = culture;
+            option2.textContent = culture;
             path1Select.appendChild(option1);
             path2Select.appendChild(option2);
         });
@@ -82,12 +52,12 @@ function initializeDropdowns() {
         // Add change event listeners
         path1Select.addEventListener('change', () => {
             const selectedOption = path1Select.options[path1Select.selectedIndex];
-            console.log('Path 1 selected:', selectedOption.value);
+            console.log('Background 1 selected:', selectedOption.value);
         });
 
         path2Select.addEventListener('change', () => {
             const selectedOption = path2Select.options[path2Select.selectedIndex];
-            console.log('Path 2 selected:', selectedOption.value);
+            console.log('Background 2 selected:', selectedOption.value);
         });
 
     } catch (error) {
@@ -98,7 +68,7 @@ function initializeDropdowns() {
 // Initialize everything when the document is ready
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        console.log('Initializing application...');
+        console.log('Initializing cultural simulator...');
         initializeDropdowns();
         
         // Initialize anime.js animations for cards
@@ -114,4 +84,4 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
         console.error('Error during initialization:', error);
     }
-}); 
+});

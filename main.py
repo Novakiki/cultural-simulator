@@ -5,13 +5,13 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from termcolor import colored
 from pydantic import BaseModel
 from typing import Dict, List, Optional, Union
-from openai import AsyncOpenAI
+from openai import OpenAI
 import os
 import json
 
-print(colored("Starting FastAPI application...", "cyan"))
+print(colored("Starting Cultural Life Simulator...", "cyan"))
 
-app = FastAPI(title="Alternate Life Simulator")
+app = FastAPI(title="Cultural Life Simulator")
 
 try:
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -21,13 +21,9 @@ except Exception as e:
 
 templates = Jinja2Templates(directory="templates")
 
-# Initialize AsyncOpenAI client
+# Initialize OpenAI client
 try:
-    client = AsyncOpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        max_retries=3,
-        timeout=30.0
-    )
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     print(colored("OpenAI client initialized successfully", "green"))
 except Exception as e:
     print(colored(f"Error initializing OpenAI client: {str(e)}", "red"))
@@ -36,14 +32,14 @@ except Exception as e:
 # Models for request/response
 class Stats(BaseModel):
     age: int
-    wealth: int
-    health: int
+    faith: int
+    familyTies: int
+    communityBonds: int
     education: int
-    skills: int
-    network: int
-    happiness: int
-    energy: int
-    status: int
+    culturalKnowledge: int
+    independence: int
+    tradition: int
+    exploration: int
     alive: bool
 
 class ChoiceHistory(BaseModel):
@@ -81,47 +77,53 @@ async def simulate_year(context: SimulationContext) -> SimulationResponse:
         if not client.api_key:
             raise ValueError("OpenAI API key not found in environment variables")
         
-        # Prepare prompt for the model
-        prompt = f"""Given the following context about a person's life path:
-Initial Choice: {context.initial_choice}
+        # Updated prompt for cultural simulation
+        prompt = f"""Given the following context about a person's cultural upbringing:
+Cultural Background: {context.initial_choice}
 Current Age: {context.current_stats.age}
-Years Passed: {context.total_years}
+Years in Journey: {context.total_years}
+
 Current Stats:
 {json.dumps(context.current_stats.dict(), indent=2)}
 
 Previous Events:
 {json.dumps([h.dict() for h in context.choice_history], indent=2)}
 
-Generate the next year of their life. Be objective and realistic. Events can be positive or negative.
-The story should be concise but impactful. Stats should change based on life events. Do not include mental health related issues in life. and have a  normal life progression unless and accident or health issue occurs.
+Generate the next year of their life, considering their cultural background and its influence on their experiences. Consider:
+- Age-appropriate cultural and religious practices
+- Family dynamics and expectations
+- Community involvement and traditions
+- Educational experiences typical for this background
+- Cultural celebrations and milestones
+- Relationships with family and community
+- Personal identity development
+- Cultural learning and transmission
 
-If the person's journey should end (due to health issues, accidents, or reaching age 100), 
-set alive to false and provide a meaningful "transition_message" about their legacy and how they transitioned to the great beyond.
-Make this transition feel like a natural progression of their life story.
+Events should be authentic to the cultural experience while avoiding stereotypes. Include both everyday moments and significant milestones.
 
-Response must be in the following JSON format:
+Response must be in this JSON format:
 {{
-    "story": "A concise description of what happened this year",
+    "story": "A culturally authentic description of what happened this year",
     "stats_changes": {{
         "stat_name": "+1 or -1 format"
     }},
     "updated_stats": {{
         "age": "integer",
-        "wealth": "integer",
-        "health": "integer",
+        "faith": "integer",
+        "familyTies": "integer",
+        "communityBonds": "integer",
         "education": "integer",
-        "skills": "integer",
-        "network": "integer",
-        "happiness": "integer",
-        "energy": "integer",
-        "status": "integer",
+        "culturalKnowledge": "integer",
+        "independence": "integer",
+        "tradition": "integer",
+        "exploration": "integer",
         "alive": "boolean"
     }},
-    "transition_message": "If alive is false, provide a beautiful message about their legacy and transition. Otherwise, leave empty."
+    "transition_message": "If alive is false, provide a culturally appropriate message about their legacy. Otherwise, leave empty."
 }}"""
 
         # Make API call
-        print(colored(f"making api call for year {context.total_years}", "yellow"))
+        print(colored(f"Exploring cultural year {context.total_years}", "yellow"))
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
@@ -147,4 +149,4 @@ Response must be in the following JSON format:
 if __name__ == "__main__":
     import uvicorn
     print(colored("Starting development server...", "yellow"))
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True) 
+    uvicorn.run("main:app", host="127.0.0.1", port=8001, reload=True) 
