@@ -1,92 +1,50 @@
-# Cultural Life Simulator
+# Cultural Simulator
 
-## Overview
-Cultural Life Simulator is an interactive web application that explores how different cultural backgrounds shape life experiences.
-
-## Features
-- Parallel simulation of two different cultural backgrounds
-- Real-time cultural stat tracking (faith, family ties, cultural knowledge, etc.)
-- Year-by-year story progression
-- Beautiful animated UI with dark mode
-- Interactive story cards with expandable content
-- Dynamic stat changes with visual feedback
-- Cultural journey from childhood through significant life stages
-
-## Technical Stack
-- Backend: FastAPI (Python)
-- Frontend: HTML, JavaScript, TailwindCSS, DaisyUI
-- Animations: Anime.js
-- AI Model: GPT-4o-mini
-- Styling: Custom CSS with responsive design
-
-## Requirements
-```
-fastapi
-uvicorn
-jinja2
-termcolor
-openai
-pydantic
-```
+A simulation exploring how cultural backgrounds shape life journeys, featuring parallel path comparisons and dynamic life choices.
 
 ## Setup
-1. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
 
-2. Set up your OpenAI API key as an environment variable:
-   ```
-   set OPENAI_API_KEY=your_api_key_here  # Windows
-   export OPENAI_API_KEY=your_api_key_here  # Linux/Mac
-   ```
+1. Clone the repository:
+```bash
+git clone https://github.com/Novakiki/cultural-simulator.git
+cd cultural-simulator
+```
 
-3. Run the application:
-   ```
-   uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-   ```
+2. Set up your environment variables:
+```bash
+# In fish shell
+set -x OPENAI_API_KEY your_api_key_here
+```
 
-## How It Works
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-### Life Path Generation
-- Users select two different cultural backgrounds to explore
-- Each path starts with identical base stats for a 5-year-old child
-- The AI model generates year-by-year progression for both paths
-- Stories and stat changes reflect cultural experiences and milestones
+## Running the Application
 
-### Stats System
-- Age: Current life stage
-- Faith: Religious and spiritual connection
-- Family Ties: Connection to family
-- Community Bonds: Integration with community
-- Education: Academic development
-- Cultural Knowledge: Understanding of traditions
-- Independence: Personal autonomy
-- Tradition: Connection to cultural practices
-- Exploration: Openness to new experiences
+Start the development server:
+```bash
+uvicorn main:app --reload
+```
 
-### Story Generation
-The AI model considers:
-- Cultural background
-- Current stats
-- Previous life events
-- Age-appropriate cultural milestones
-- Cultural traditions and practices
+The application will be available at: http://127.0.0.1:8000
 
-### End Conditions
-A life path simulation ends when:
-- Person reaches adulthood or significant cultural milestone
-- Natural conclusion of the cultural journey
-- User manually stops the simulation
+## Features
 
-## Usage
-1. Open the application in a web browser
-2. Read the disclaimer about AI-generated content
-3. Select different cultural backgrounds from the dropdowns
-4. Click "Begin Cultural Journey" to start the simulation
-5. Watch as both lives unfold in parallel
-6. Use the stop button to end simulation if desired
-7. Expand story cards to read full details
+- Dynamic life path simulation
+- Cultural context integration
+- Real-time stat tracking
+- Parallel path comparison
+- Modern glass morphism UI
 
-## Note
-This is an experimental project using AI to explore different cultural experiences. All generated content is fictional and any similarities to real events or persons are purely coincidental. 
+## Development
+
+- Built with FastAPI and modern JavaScript
+- Styled with Tailwind CSS and custom glass morphism effects
+- Integrated with OpenAI for dynamic content generation
+
+## Notes
+
+- Make sure your OpenAI API key is set before running
+- The `--reload` flag enables auto-reload for development 
