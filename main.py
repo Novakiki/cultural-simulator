@@ -36,6 +36,17 @@ async def home(request: Request):
         print(colored(f"Error rendering template: {str(e)}", "red"))
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/how-it-works", response_class=HTMLResponse)
+async def how_it_works(request: Request):
+    try:
+        return templates.TemplateResponse(
+            "how_it_works.html",
+            {"request": request}
+        )
+    except Exception as e:
+        print(colored(f"Error rendering template: {str(e)}", "red"))
+        raise HTTPException(status_code=500, detail=str(e))
+
 def validate_simulation_response(response: Dict[str, Any]) -> bool:
     """Validate the simulation response has all required fields."""
     required_fields = {'updated_stats', 'story', 'stats_changes'}
