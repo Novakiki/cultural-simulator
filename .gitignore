@@ -46,4 +46,7 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
-.runway/ 
+.runway/
+
+# Assets that should be managed separately
+favicon.ico 
