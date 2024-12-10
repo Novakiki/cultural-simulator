@@ -120,30 +120,43 @@ async function handleStartSimulation() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing application...');
+    console.log('%c Cultural Life Simulator Initializing...', 'background: #222; color: #bada55; font-size: 16px');
     
-    // Show disclaimer modal on first visit
-    const hasSeenDisclaimer = localStorage.getItem('hasSeenDisclaimer');
-    if (!hasSeenDisclaimer) {
-        const modal = document.getElementById('disclaimer-modal');
-        if (modal) {
-            // Show modal with animation
-            setTimeout(() => {
-                modal.classList.add('opacity-100');
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                modal.querySelector('.bg-slate-900\\/90').classList.add('scale-100');
-            }, 100);
+    // Force show modal for testing
+    localStorage.removeItem('hasSeenDisclaimer'); // Force remove the flag
+    const modal = document.getElementById('disclaimer-modal');
+    console.log('%c Modal element:', 'color: #ff6b6b', modal);
+    
+    if (modal) {
+        // Show modal immediately
+        console.log('%c Attempting to show modal...', 'color: #4ecdc4');
+        modal.style.display = 'flex';
+        modal.classList.add('opacity-100');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        const modalContent = modal.querySelector('.modal-content');
+        console.log('%c Modal content element:', 'color: #ff6b6b', modalContent);
+        
+        if (modalContent) {
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
 
-            // Handle acknowledgment
-            const acknowledgeBtn = document.getElementById('acknowledge-disclaimer');
-            if (acknowledgeBtn) {
-                acknowledgeBtn.addEventListener('click', () => {
-                    modal.classList.remove('opacity-100');
-                    modal.classList.add('opacity-0', 'pointer-events-none');
-                    modal.querySelector('.bg-slate-900\\/90').classList.remove('scale-100');
-                    localStorage.setItem('hasSeenDisclaimer', 'true');
-                });
-            }
+        // Handle acknowledgment
+        const acknowledgeBtn = document.getElementById('acknowledge-disclaimer');
+        console.log('%c Acknowledge button:', 'color: #ff6b6b', acknowledgeBtn);
+        
+        if (acknowledgeBtn) {
+            acknowledgeBtn.addEventListener('click', () => {
+                console.log('%c Closing modal...', 'color: #4ecdc4');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                const modalContent = modal.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.classList.remove('scale-100');
+                    modalContent.classList.add('scale-95');
+                }
+                localStorage.setItem('hasSeenDisclaimer', 'true');
+            });
         }
     }
     
