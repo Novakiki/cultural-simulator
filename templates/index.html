@@ -241,27 +241,29 @@
     <script type="module" src="/static/js/main.js"></script>
 
     <!-- Simulation Disclaimer Modal -->
-    <div id="disclaimer-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300">
-        <div class="modal-content bg-slate-900/90 border-2 border-indigo-500/50 p-6 rounded-lg shadow-xl max-w-md mx-4 transform transition-all duration-300">
-            <h3 class="text-lg font-bold mb-4 gradient-text">Welcome to Cultural Life Simulator</h3>
-            <div class="space-y-3 text-slate-300">
-                <p class="text-sm">This is an educational simulation designed to explore how different cultural backgrounds might shape life experiences.</p>
-                <p class="text-sm">Please note:</p>
-                <ul class="text-sm list-disc list-inside space-y-1">
-                    <li>This is a simulation only and not representative of real individuals</li>
-                    <li>Results are generated for educational purposes</li>
-                    <li>Cultural experiences are unique to each individual</li>
-                </ul>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <button 
-                    id="acknowledge-disclaimer" 
-                    type="button"
-                    class="btn bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer"
-                    onclick="this.blur();"
-                >
-                    I Understand
-                </button>
+    <div id="disclaimer-modal" class="fixed inset-0 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-slate-900/90 border-2 border-indigo-500/50 p-6 rounded-lg shadow-xl max-w-md w-full">
+                <h3 class="text-lg font-bold mb-4 gradient-text">Welcome to Cultural Life Simulator</h3>
+                <div class="space-y-3 text-slate-300">
+                    <p class="text-sm">This is an educational simulation designed to explore how different cultural backgrounds might shape life experiences.</p>
+                    <p class="text-sm">Please note:</p>
+                    <ul class="text-sm list-disc list-inside space-y-1">
+                        <li>This is a simulation only and not representative of real individuals</li>
+                        <li>Results are generated for educational purposes</li>
+                        <li>Cultural experiences are unique to each individual</li>
+                    </ul>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button 
+                        id="acknowledge-disclaimer" 
+                        type="button"
+                        class="btn bg-indigo-600 hover:bg-indigo-700 text-white"
+                    >
+                        I Understand
+                    </button>
+                </div>
             </div>
         </div>
     </div>

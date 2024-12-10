@@ -120,55 +120,26 @@ async function handleStartSimulation() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('%c Cultural Life Simulator Initializing...', 'background: #222; color: #bada55; font-size: 16px');
+    console.log('Cultural Life Simulator Initializing...');
     
-    // Force show modal for testing
-    localStorage.removeItem('hasSeenDisclaimer'); // Force remove the flag
+    // Handle modal
+    const hasSeenDisclaimer = localStorage.getItem('hasSeenDisclaimer');
     const modal = document.getElementById('disclaimer-modal');
-    console.log('%c Modal element:', 'color: #ff6b6b', modal);
     
-    if (modal) {
-        // Show modal immediately
-        console.log('%c Attempting to show modal...', 'color: #4ecdc4');
-        modal.style.display = 'flex';
-        modal.classList.add('opacity-100');
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        const modalContent = modal.querySelector('.modal-content');
-        console.log('%c Modal content element:', 'color: #ff6b6b', modalContent);
+    if (modal && !hasSeenDisclaimer) {
+        // Show modal
+        modal.classList.remove('hidden');
         
-        if (modalContent) {
-            modalContent.classList.remove('scale-95');
-            modalContent.classList.add('scale-100');
-        }
-
-        // Handle acknowledgment
+        // Handle button click
         const acknowledgeBtn = document.getElementById('acknowledge-disclaimer');
-        console.log('%c Acknowledge button:', 'color: #ff6b6b', acknowledgeBtn);
-        
         if (acknowledgeBtn) {
-            // Remove any existing event listeners
-            const newAcknowledgeBtn = acknowledgeBtn.cloneNode(true);
-            acknowledgeBtn.parentNode.replaceChild(newAcknowledgeBtn, acknowledgeBtn);
-            
-            // Add new event listener
-            newAcknowledgeBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('%c Closing modal...', 'color: #4ecdc4');
+            acknowledgeBtn.addEventListener('click', () => {
+                // Hide modal
+                modal.classList.add('hidden');
                 
-                // Hide the modal
-                modal.style.opacity = '0';
-                modal.style.pointerEvents = 'none';
-                
-                // Add a slight delay before adding display: none
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 300);
-
-                // Store in localStorage
+                // Save to localStorage
                 try {
                     localStorage.setItem('hasSeenDisclaimer', 'true');
-                    console.log('%c LocalStorage updated', 'color: #4ecdc4');
                 } catch (error) {
                     console.error('LocalStorage error:', error);
                 }
