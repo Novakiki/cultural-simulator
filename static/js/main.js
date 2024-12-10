@@ -122,6 +122,31 @@ async function handleStartSimulation() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing application...');
     
+    // Show disclaimer modal on first visit
+    const hasSeenDisclaimer = localStorage.getItem('hasSeenDisclaimer');
+    if (!hasSeenDisclaimer) {
+        const modal = document.getElementById('disclaimer-modal');
+        if (modal) {
+            // Show modal with animation
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.bg-slate-900\\/90').classList.add('scale-100');
+            }, 100);
+
+            // Handle acknowledgment
+            const acknowledgeBtn = document.getElementById('acknowledge-disclaimer');
+            if (acknowledgeBtn) {
+                acknowledgeBtn.addEventListener('click', () => {
+                    modal.classList.remove('opacity-100');
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    modal.querySelector('.bg-slate-900\\/90').classList.remove('scale-100');
+                    localStorage.setItem('hasSeenDisclaimer', 'true');
+                });
+            }
+        }
+    }
+    
     // Populate dropdowns
     populateDropdowns();
     
